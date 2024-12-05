@@ -21,8 +21,3 @@ The QuadTree is dynamic, meaning it can grow and shrink as entities are added an
 ### Performance Metrics
 
 To ensure the QuadTree performs efficiently, we measure the time taken for key operations such as insertion, querying, and removal of entities. These metrics help us identify and address any performance bottlenecks.
-
-## Implementation
-
-The QuadTree is implemented in C++ and integrated into the City Sprint application. Below is a snippet of the test code used to measure the performance of the QuadTree:
-
