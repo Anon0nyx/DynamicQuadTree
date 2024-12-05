@@ -16,46 +16,51 @@ void printEntities(const std::vector<TestEntity*>& entities) {
 }
 
 int main() {
-  // Create a QuadTree with a width and height of 100 and a max depth of 5
-  QuadTree<TestEntity> quadTree(100, 100, 5);
+  const int numTests = 1000;
+  double totalInsertionTime = 0.0;
+  double totalQueryTime = 0.0;
+  double totalRemovalTime = 0.0;
 
-  // Create some test entities
-  TestEntity entity1 = { 1, {10, 10}, 5 };
-  TestEntity entity2 = { 2, {20, 20}, 5 };
-  TestEntity entity3 = { 3, {30, 30}, 5 };
-  TestEntity entity4 = { 4, {40, 40}, 5 };
-  TestEntity entity5 = { 5, {50, 50}, 5 };
+  for (int i = 0; i < numTests; ++i) {
+    // Create a QuadTree with a width and height of 100 and a max depth of 5
+    auto quadTree = createQuadTree<TestEntity>(100, 100, 5);
 
-  // Measure insertion time
-  auto start = std::chrono::high_resolution_clock::now();
-  quadTree.insert(&entity1);
-  quadTree.insert(&entity2);
-  quadTree.insert(&entity3);
-  quadTree.insert(&entity4);
-  quadTree.insert(&entity5);
-  auto end = std::chrono::high_resolution_clock::now();
-  std::chrono::duration<double> insertionTime = end - start;
-  std::cout << "Insertion time: " << insertionTime.count() << " seconds\n";
+    // Create some test entities
+    TestEntity entity1 = { 1, {10, 10}, 5 };
+    TestEntity entity2 = { 2, {20, 20}, 5 };
+    TestEntity entity3 = { 3, {30, 30}, 5 };
+    TestEntity entity4 = { 4, {40, 40}, 5 };
+    TestEntity entity5 = { 5, {50, 50}, 5 };
 
-  // Measure query time
-  start = std::chrono::high_resolution_clock::now();
-  std::vector<TestEntity*> result = quadTree.queryRange(25, 25, 20);
-  end = std::chrono::high_resolution_clock::now();
-  std::chrono::duration<double> queryTime = end - start;
-  std::cout << "Query time: " << queryTime.count() << " seconds\n";
-  printEntities(result);
+    // Measure insertion time
+    auto start = std::chrono::high_resolution_clock::now();
+    insertEntity(quadTree, &entity1);
+    insertEntity(quadTree, &entity2);
+    insertEntity(quadTree, &entity3);
+    insertEntity(quadTree, &entity4);
+    insertEntity(quadTree, &entity5);
+    auto end = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> insertionTime = end - start;
+    totalInsertionTime += insertionTime.count();
 
-  // Measure removal time
-  start = std::chrono::high_resolution_clock::now();
-  quadTree.remove(&entity3);
-  end = std::chrono::high_resolution_clock::now();
-  std::chrono::duration<double> removalTime = end - start;
-  std::cout << "Removal time: " << removalTime.count() << " seconds\n";
+    // Measure query time
+    start = std::chrono::high_resolution_clock::now();
+    std::vector<TestEntity*> result = queryRange(quadTree, 25, 25, 20);
+    end = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> queryTime = end - start;
+    totalQueryTime += queryTime.count();
 
-  // Query again after removal
-  std::cout << "\nAfter removing entity 3:\n";
-  result = quadTree.queryRange(25, 25, 20);
-  printEntities(result);
+    // Measure removal time
+    start = std::chrono::high_resolution_clock::now();
+    removeEntity(quadTree, &entity3);
+    end = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> removalTime = end - start;
+    totalRemovalTime += removalTime.count();
+  }
+
+  std::cout << "Average insertion time: " << (totalInsertionTime / numTests) << " seconds\n";
+  std::cout << "Average query time: " << (totalQueryTime / numTests) << " seconds\n";
+  std::cout << "Average removal time: " << (totalRemovalTime / numTests) << " seconds\n";
 
   return 0;
 }
