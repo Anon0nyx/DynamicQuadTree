@@ -1,5 +1,6 @@
 #include <iostream>
 #include <chrono>
+#include <vector>
 #include "quadTree.h"
 
 // Define a simple entity type for testing
@@ -17,6 +18,7 @@ void printEntities(const std::vector<TestEntity*>& entities) {
 
 int main() {
   const int numTests = 1000;
+  const int numEntities = 1000;
   double totalInsertionTime = 0.0;
   double totalQueryTime = 0.0;
   double totalRemovalTime = 0.0;
@@ -25,34 +27,33 @@ int main() {
     // Create a QuadTree with a width and height of 100 and a max depth of 5
     auto quadTree = createQuadTree<TestEntity>(100, 100, 5);
 
-    // Create some test entities
-    TestEntity entity1 = { 1, {10, 10}, 5 };
-    TestEntity entity2 = { 2, {20, 20}, 5 };
-    TestEntity entity3 = { 3, {30, 30}, 5 };
-    TestEntity entity4 = { 4, {40, 40}, 5 };
-    TestEntity entity5 = { 5, {50, 50}, 5 };
+    // Create and insert test entities
+    std::vector<TestEntity> entities;
+    for (int j = 0; j < numEntities; ++j) {
+      entities.push_back({ j, { rand() % 100, rand() % 100 }, 5 });
+    }
 
     // Measure insertion time
     auto start = std::chrono::high_resolution_clock::now();
-    insertEntity(quadTree, &entity1);
-    insertEntity(quadTree, &entity2);
-    insertEntity(quadTree, &entity3);
-    insertEntity(quadTree, &entity4);
-    insertEntity(quadTree, &entity5);
+    for (auto& entity : entities) {
+      insertEntity(quadTree, &entity);
+    }
     auto end = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> insertionTime = end - start;
     totalInsertionTime += insertionTime.count();
 
     // Measure query time
     start = std::chrono::high_resolution_clock::now();
-    std::vector<TestEntity*> result = queryRange(quadTree, 25, 25, 20);
+    std::vector<TestEntity*> result = queryRange(quadTree, 50, 50, 20);
     end = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> queryTime = end - start;
     totalQueryTime += queryTime.count();
 
     // Measure removal time
     start = std::chrono::high_resolution_clock::now();
-    removeEntity(quadTree, &entity3);
+    for (auto& entity : entities) {
+      removeEntity(quadTree, &entity);
+    }
     end = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> removalTime = end - start;
     totalRemovalTime += removalTime.count();
@@ -62,5 +63,6 @@ int main() {
   std::cout << "Average query time: " << (totalQueryTime / numTests) << " seconds\n";
   std::cout << "Average removal time: " << (totalRemovalTime / numTests) << " seconds\n";
 
+  std::cout << "\nTESTING COMPLETE, TERMINATION IN PROGRESS" << std::endl;
   return 0;
 }
