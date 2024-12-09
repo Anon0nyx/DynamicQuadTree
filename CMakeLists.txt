@@ -8,7 +8,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 # Add the executable
-add_executable(QuadTreeTest quadTreeTest.cpp)
+add_executable(QuadTreeTest testQuadTree.cpp)
 
 # Include directories
 include_directories(${PROJECT_SOURCE_DIR})

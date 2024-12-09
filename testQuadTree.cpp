@@ -4,17 +4,22 @@
 #include "quadTree.h"
 
 // Define a simple entity type for testing
-struct TestEntity {
+struct CollidableEntity {
   int id;
   std::vector<int> midpoint;
   int size;
+  int defense{};
+  int attack{};
+  std::vector<int> collidingEntities;
+  std::string color;
 };
 
-void printEntities(const std::vector<TestEntity*>& entities) {
-  for (const auto& entity : entities) {
-    std::cout << "Entity ID: " << entity->id << " at (" << entity->midpoint[0] << ", " << entity->midpoint[1] << ")\n";
-  }
-}
+struct Troop : public CollidableEntity {
+  int movement{};
+  int attackDistance{};
+  int cost{};
+  int foodCost{};
+};
 
 int main() {
   const int numTests = 1000;
@@ -25,13 +30,15 @@ int main() {
 
   for (int i = 0; i < numTests; ++i) {
     // Create a QuadTree with a width and height of 100 and a max depth of 5
-    auto quadTree = createQuadTree<TestEntity>(100, 100, 5);
+    auto quadTree = createQuadTree<CollidableEntity>(100, 100, 5);
 
     // Create and insert test entities
-    std::vector<TestEntity> entities;
+    std::vector<CollidableEntity> entities;
     for (int j = 0; j < numEntities; ++j) {
-      entities.push_back({ j, { rand() % 100, rand() % 100 }, 5 });
+      Troop entity = { j, { rand() % 100, rand() % 100 }, 5 };
+      entities.push_back(entity);
     }
+
 
     // Measure insertion time
     auto start = std::chrono::high_resolution_clock::now();
@@ -44,7 +51,7 @@ int main() {
 
     // Measure query time
     start = std::chrono::high_resolution_clock::now();
-    std::vector<TestEntity*> result = queryRange(quadTree, 50, 50, 20);
+    std::vector<CollidableEntity*> result = queryRange(quadTree, 50, 50, 20);
     end = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> queryTime = end - start;
     totalQueryTime += queryTime.count();

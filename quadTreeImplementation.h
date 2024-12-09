@@ -90,7 +90,11 @@ void subdivide(QuadTreeNode<EntityType>* node) {
   node->children[2] = std::make_unique<QuadTreeNode<EntityType>>(node->x, node->y + halfSize, halfSize);
   node->children[3] = std::make_unique<QuadTreeNode<EntityType>>(node->x + halfSize, node->y + halfSize, halfSize);
 
+
+  int count = 0;
   for (auto& entity : node->entities) {
+    std::cout << "Iterating on Entity: " << count << " with midpoint: (" << entity->midpoint[0] << ", " << entity->midpoint[1] << ")" << std::endl;
+    ++count;
     int midX = node->x + halfSize;
     int midY = node->y + halfSize;
     int index = (entity->midpoint[0] > midX) + 2 * (entity->midpoint[1] > midY);
