@@ -1,7 +1,7 @@
 #include <iostream>
 #include <chrono>
 #include <vector>
-#include "QuadTree.h"
+#include "newQuadTree.h"
 
 // Define a simple entity type for testing
 struct CollidableEntity {
@@ -32,14 +32,17 @@ int main() {
     // Create a QuadTree with a width and height of 100 and a max depth of 5
     auto quadTree = createQuadTree<CollidableEntity>(100, 100, 5);
 
+    Quad center(Point(0,0), Point(1500, 600));
+
     // Create and insert test entities
     std::vector<CollidableEntity> entities;
     for (int j = 0; j < numEntities; ++j) {
       Troop entity = { j, { rand() % 100, rand() % 100 }, 5 };
-      entities.push_back(entity);
+      Node toEnter(Point(entity->midpoint[0], entity->midpoint[1]), entity);
+      center.insert(&toEnter);
     }
-
-
+  }
+/*
     // Measure insertion time
     auto start = std::chrono::high_resolution_clock::now();
     for (auto& entity : entities) {
@@ -69,7 +72,7 @@ int main() {
   std::cout << "Average insertion time: " << (totalInsertionTime / numTests) << " seconds\n";
   std::cout << "Average query time: " << (totalQueryTime / numTests) << " seconds\n";
   std::cout << "Average removal time: " << (totalRemovalTime / numTests) << " seconds\n";
-
+*/
   std::cout << "\nTESTING COMPLETE, TERMINATION IN PROGRESS" << std::endl;
   return 0;
 }

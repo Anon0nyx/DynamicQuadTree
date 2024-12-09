@@ -10,12 +10,6 @@ struct TestEntity {
   int size;
 };
 
-void printEntities(const std::vector<TestEntity*>& entities) {
-  for (const auto& entity : entities) {
-    std::cout << "Entity ID: " << entity->id << " at (" << entity->midpoint[0] << ", " << entity->midpoint[1] << ")\n";
-  }
-}
-
 int main() {
   const int numTests = 1000;
   const int numEntities = 1000;
