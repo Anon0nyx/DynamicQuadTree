@@ -23,7 +23,7 @@ void Quad<EntityType>::insert(Node<EntityType>* node) {
     if ((topLeft.x + botRight.x) / 2 >= node->pos.x) {
         if ((topLeft.y + botRight.y) / 2 >= node->pos.y) {
             if (topLeftTree == nullptr)
-                topLeftTree = new Quad(Point(topLeft.x, topLeft.y), Point((topLeft.x + botRight.x) / 2, (topLeft.y + botRight.y) / 2));
+                topLeftTree = new Quad(topLeft, Point((topLeft.x + botRight.x) / 2, (topLeft.y + botRight.y) / 2));
             topLeftTree->insert(node);
         } else {
             if (botLeftTree == nullptr)
@@ -37,7 +37,7 @@ void Quad<EntityType>::insert(Node<EntityType>* node) {
             topRightTree->insert(node);
         } else {
             if (botRightTree == nullptr)
-                botRightTree = new Quad(Point((topLeft.x + botRight.x) / 2, (topLeft.y + botRight.y) / 2), Point(botRight.x, botRight.y));
+                botRightTree = new Quad(Point((topLeft.x + botRight.x) / 2, (topLeft.y + botRight.y) / 2), botRight);
             botRightTree->insert(node);
         }
     }
@@ -79,6 +79,18 @@ Node<EntityType>* Quad<EntityType>::search(Point p) {
 template <typename EntityType>
 bool Quad<EntityType>::inBoundary(Point p) {
     return (p.x >= topLeft.x && p.x <= botRight.x && p.y >= topLeft.y && p.y <= botRight.y);
+}
+
+// Print the IDs of the entities in the quadtree
+template <typename EntityType>
+void Quad<EntityType>::printIDs() {
+    if (n != nullptr) {
+        std::cout << "Entity ID: " << n->data.id << " at (" << n->pos.x << ", " << n->pos.y << ")\n";
+    }
+    if (topLeftTree != nullptr) topLeftTree->printIDs();
+    if (topRightTree != nullptr) topRightTree->printIDs();
+    if (botLeftTree != nullptr) botLeftTree->printIDs();
+    if (botRightTree != nullptr) botRightTree->printIDs();
 }
 
 #endif // NEW_QUAD_TREE_IMPL_H

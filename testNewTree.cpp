@@ -1,6 +1,7 @@
 #include <iostream>
 #include <chrono>
 #include <vector>
+#include <unordered_set>
 #include "NewQuadTree.h"
 
 // Define a simple entity type for testing
@@ -34,61 +35,30 @@ int main() {
   Node<CollidableEntity> initialEnter(Point(initialEntity.midpoint[0], initialEntity.midpoint[1]), initialEntity);
   center.insert(&initialEnter);
 
-  for (int i=2; i<=6; ++i) {
-    Troop entity = { i, { rand() % 100, rand() % 100 }, 5 };
-    Node<CollidableEntity> toEnter(Point(entity.midpoint[0], entity.midpoint[1]), entity);
-    center.insert(&toEnter);
-  }
+  Troop entity2 = { 2, { 300, 400 }, 5 };
+  Node<CollidableEntity> toEnter2(Point(entity2.midpoint[0], entity2.midpoint[1]), entity2);
+  center.insert(&toEnter2);
+
+  Troop entity3 = { 3, { 1400, 550 }, 5 };
+  Node<CollidableEntity> toEnter3(Point(entity3.midpoint[0], entity3.midpoint[1]), entity3);
+  center.insert(&toEnter3);
+
+  Troop entity4 = { 4, { 900, 100 }, 5 };
+  Node<CollidableEntity> toEnter4(Point(entity4.midpoint[0], entity4.midpoint[1]), entity4);
+  center.insert(&toEnter4);
+
+  Troop entity5 = { 5, { 1200, 300 }, 5 };
+  Node<CollidableEntity> toEnter5(Point(entity5.midpoint[0], entity5.midpoint[1]), entity5);
+  center.insert(&toEnter5);
+
+  Troop entity6 = { 6, { 1400, 500 }, 5 };
+  Node<CollidableEntity> toEnter6(Point(entity6.midpoint[0], entity6.midpoint[1]), entity6);
+  center.insert(&toEnter6);
   
   Node<CollidableEntity>* foundNode = center.search(Point(150,500));
   std::cout << foundNode->data.midpoint[0] << std::endl;
   
-/*
-  for (int i = 0; i < numTests; ++i) {
-    // Create a QuadTree with a width and height of 100 and a max depth of 5
-    Quad<CollidableEntity> center(Point(0, 0), Point(1500, 600));
+  center.printIDs();
 
-    // Create and insert test entities
-    std::vector<CollidableEntity> entities;
-    for (int j = 0; j < numEntities; ++j) {
-      Troop entity = { j, { rand() % 100, rand() % 100 }, 5 };
-      Node<CollidableEntity> toEnter(Point(entity.midpoint[0], entity.midpoint[1]), entity);
-      center.insert(&toEnter);
-    }
-
-    // Measure insertion time
-    auto start = std::chrono::high_resolution_clock::now();
-    for (auto& entity : entities) {
-      Node<CollidableEntity> toEnter(Point(entity.midpoint[0], entity.midpoint[1]), entity);
-      center.insert(&toEnter);
-    }
-    auto end = std::chrono::high_resolution_clock::now();
-    std::chrono::duration<double> insertionTime = end - start;
-    totalInsertionTime += insertionTime.count();
-
-    // Measure query time
-    start = std::chrono::high_resolution_clock::now();
-    Node<CollidableEntity>* result = center.search(Point(50, 50));
-    end = std::chrono::high_resolution_clock::now();
-    std::chrono::duration<double> queryTime = end - start;
-    totalQueryTime += queryTime.count();
-
-    // Measure removal time
-    start = std::chrono::high_resolution_clock::now();
-    // Assuming we have a remove function (not implemented in the provided code)
-    // for (auto& entity : entities) {
-    //     center.remove(&entity);
-    // }
-    end = std::chrono::high_resolution_clock::now();
-    std::chrono::duration<double> removalTime = end - start;
-    totalRemovalTime += removalTime.count();
-  }
-
-  std::cout << "Average insertion time: " << (totalInsertionTime / numTests) << " seconds\n";
-  std::cout << "Average query time: " << (totalQueryTime / numTests) << " seconds\n";
-  std::cout << "Average removal time: " << (totalRemovalTime / numTests) << " seconds\n";
-
-  std::cout << "\nTESTING COMPLETE, TERMINATION IN PROGRESS" << std::endl;
-*/ 
  return 0;
 }

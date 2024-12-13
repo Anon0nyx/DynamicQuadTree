@@ -38,6 +38,7 @@ public:
     void insert(Node<EntityType>* node);
     Node<EntityType>* search(Point p);
     bool inBoundary(Point p);
+    void printIDs();
 };
 
 #include "NewQuadTreeImplementation.h"
